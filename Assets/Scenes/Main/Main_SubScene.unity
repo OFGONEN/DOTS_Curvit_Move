@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4799dafeb6aefab41bd26caa59a21900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OSMNodePrefab: {fileID: 5636704060621793775, guid: 95953fa7e9c2d2d45b97878defc281c5,
+  OSMNodePrefab: {fileID: 121903086412216286, guid: 8391ed20f7f412344a0195744dd129c3,
     type: 3}
 --- !u!4 &2049984185
 Transform:
