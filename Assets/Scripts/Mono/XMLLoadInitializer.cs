@@ -130,7 +130,7 @@ public class XMLLoadInitializer : MonoBehaviour
                         switch (xmlTag.Attributes["v"].Value)
                         {
                             case "true":
-                                osmWayDataFlag |= OSMWayDataFlag.BiDirectional;
+                                osmWayDataFlag |= OSMWayDataFlag.Bidirectional;
                                 break;
                             case "false":
                                 break;

@@ -18,5 +18,5 @@ public enum OSMWayDataFlag
     None,
     Solid,
     Dashed,
-    BiDirectional
+    Bidirectional
 }
