@@ -30,7 +30,7 @@ public partial class OSMWayLineLoaderSystem : SystemBase
             LineRenderer.positionCount = wayData.NodeRefCount;
 
             for (int j = 0; j < wayData.NodeRefCount; j++)
-                LineRenderer.SetPosition(j, osmLoadComponent.OSMNodeDataArray[wayData.NodeRefSlice_Start + j].Position);
+                LineRenderer.SetPosition(j, osmLoadComponent.OSMNodeDataArray[osmLoadComponent.OSMWayNodeRefDataList[wayData.NodeRefSlice_Start + j] - 1].Position);
 
             var isBidirectional =
                 (wayData.OSMWayDataFlag & OSMWayDataFlag.Bidirectional) == OSMWayDataFlag.Bidirectional;

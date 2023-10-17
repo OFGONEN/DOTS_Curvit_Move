@@ -20,6 +20,8 @@ public class XMLLoadInitializer : MonoBehaviour
     private void OnDisable()
     {
         NodeOsmDataArray.Dispose();
+        WayOsmDataArray.Dispose();
+        WayOsmNodeRefDataList.Dispose();
     }
 
     [ContextMenu("Load XML")]
@@ -89,7 +91,7 @@ public class XMLLoadInitializer : MonoBehaviour
         WayOsmDataArray = new NativeArray<OSMWayData>(XMLNodeList_Way.Count, Allocator.Persistent);
         WayOsmNodeRefDataList = new NativeList<int>(XMLNodeList_Way.Count * 12, Allocator.Persistent);
 
-        int nodeRefSlicCounter = 0;
+        int nodeRefSliceCounter = 0;
 
         for (int i = 0; i < XMLNodeList_Way.Count; i++)
         {
@@ -146,11 +148,11 @@ public class XMLLoadInitializer : MonoBehaviour
             {
                 Id = wayID,
                 OSMWayDataFlag = osmWayDataFlag,
-                NodeRefSlice_Start = nodeRefSlicCounter,
+                NodeRefSlice_Start = nodeRefSliceCounter,
                 NodeRefSlice_End = WayOsmNodeRefDataList.Length - 1
             };
 
-            nodeRefSlicCounter = WayOsmNodeRefDataList.Length;
+            nodeRefSliceCounter = WayOsmNodeRefDataList.Length;
         }
     }
 }
