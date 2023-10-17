@@ -36,6 +36,7 @@ public partial struct OSMLoaderSystem : ISystem
         
         var nodeInstantiateParallelJobHANDLE = new NodeInstantiateParallelJob
         {
+            sortKey = 0,
             ECB = ECBParalel,
             NodeEntityPrefab = osmPrefabProperties.OSMNodePrefabEntity,
             OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray
