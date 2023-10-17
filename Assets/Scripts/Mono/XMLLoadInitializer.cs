@@ -11,8 +11,10 @@ public class XMLLoadInitializer : MonoBehaviour
     public string OsmPath;
     
     private NativeArray<OSMNodeData> NodeOsmDataArray;
+    private NativeArray<OSMWayData> WayOsmDataArray;
 
     private XmlNodeList XMLNodeList_Node;
+    private XmlNodeList XMLNodeList_Way;
 
     private void OnDisable()
     {
@@ -20,15 +22,17 @@ public class XMLLoadInitializer : MonoBehaviour
     }
 
     [ContextMenu("Load XML")]
-    public void InitializeXMLLoad()
+    private void InitializeXMLLoad()
     {
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(OsmPath);
             
         var xmlNodeOsm = xmlDocument.SelectSingleNode("osm");
         XMLNodeList_Node = xmlNodeOsm.SelectNodes("node");
+        XMLNodeList_Way = xmlNodeOsm.SelectNodes("way");
         
         ReadOSMNodeData();
+        ReadOSMWayData();
         
         //Spawn Entity
         var OsmLoadComponent = new OSMLoadComponent
@@ -42,7 +46,7 @@ public class XMLLoadInitializer : MonoBehaviour
         entityManager.AddComponentData(entity, OsmLoadComponent);
     }
 
-    public void ReadOSMNodeData()
+    private void ReadOSMNodeData()
     {
         NodeOsmDataArray = new NativeArray<OSMNodeData>(XMLNodeList_Node.Count, Allocator.Persistent);
 
@@ -74,6 +78,71 @@ public class XMLLoadInitializer : MonoBehaviour
                 Id = int.Parse(id),
                 Position = position
             };    
+        }
+    }
+
+    private void ReadOSMWayData()
+    {
+        WayOsmDataArray = new NativeArray<OSMWayData>(XMLNodeList_Way.Count, Allocator.Persistent);
+
+        for (int i = 0; i < XMLNodeList_Way.Count; i++)
+        {
+            XmlNode xmlNode_Way = XMLNodeList_Way[i];
+
+            int wayID = int.Parse(xmlNode_Way.Attributes["id"].Value);
+
+            var xmlNodeList_NodeRef = xmlNode_Way.SelectNodes("nd");
+            NativeArray<OSMNodeData> osmNodeDataArray = new NativeArray<OSMNodeData>(xmlNodeList_NodeRef.Count, Allocator.Persistent);
+
+            for (int j = 0; j < xmlNodeList_NodeRef.Count; j++)
+            {
+                var nodeID = int.Parse(xmlNodeList_NodeRef[j].Attributes["ref"].Value);
+                osmNodeDataArray[j] = NodeOsmDataArray[nodeID];
+            }
+
+            OSMWayDataFlag osmWayDataFlag = OSMWayDataFlag.None;
+
+
+            foreach (XmlNode xmlTag in xmlNode_Way.SelectNodes("tag"))
+            {
+                switch (xmlTag.Attributes["k"].Value)
+                {
+                    case "subtype":
+                        switch (xmlTag.Attributes["v"].Value)
+                        {
+                            case "solid":
+                                osmWayDataFlag |= OSMWayDataFlag.Solid;
+                                break;
+                            case "dashed":
+                                osmWayDataFlag |= OSMWayDataFlag.Dashed;
+                                break;
+                            default:
+                                Debug.Log("Unsupported Way subtype value: " + xmlTag.Attributes["v"].Value);
+                                break;
+                        }
+                        break; 
+                    case "bidirectional":
+                        switch (xmlTag.Attributes["v"].Value)
+                        {
+                            case "true":
+                                osmWayDataFlag |= OSMWayDataFlag.BiDirectional;
+                                break;
+                            case "false":
+                                break;
+                            default:
+                                Debug.Log("Unsupported Way bidirectional value: " + xmlTag.Attributes["v"].Value);
+                                break;
+                        }
+                        break;
+                }
+            }
+            
+            WayOsmDataArray[i] = new OSMWayData
+            {
+                Id = wayID,
+                OSMNodeDataArray = osmNodeDataArray,
+                OSMWayDataFlag = osmWayDataFlag
+            };
         }
     }
 }
