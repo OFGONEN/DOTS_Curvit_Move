@@ -12,6 +12,7 @@ public class XMLLoadInitializer : MonoBehaviour
     
     private NativeArray<OSMNodeData> NodeOsmDataArray;
     private NativeArray<OSMWayData> WayOsmDataArray;
+    private NativeList<int> WayOsmNodeRefDataList;
 
     private XmlNodeList XMLNodeList_Node;
     private XmlNodeList XMLNodeList_Way;
@@ -38,7 +39,8 @@ public class XMLLoadInitializer : MonoBehaviour
         var OsmLoadComponent = new OSMLoadComponent
         {
             OSMNodeDataArray = this.NodeOsmDataArray,
-            OSMWayDataArray = this.WayOsmDataArray
+            OSMWayDataArray = this.WayOsmDataArray,
+            OSMWayNodeRefDataList = this.WayOsmNodeRefDataList
         };
         
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -85,6 +87,9 @@ public class XMLLoadInitializer : MonoBehaviour
     private void ReadOSMWayData()
     {
         WayOsmDataArray = new NativeArray<OSMWayData>(XMLNodeList_Way.Count, Allocator.Persistent);
+        WayOsmNodeRefDataList = new NativeList<int>(XMLNodeList_Way.Count * 12, Allocator.Persistent);
+
+        int nodeRefSlicCounter = 0;
 
         for (int i = 0; i < XMLNodeList_Way.Count; i++)
         {
@@ -93,17 +98,16 @@ public class XMLLoadInitializer : MonoBehaviour
             int wayID = int.Parse(xmlNode_Way.Attributes["id"].Value);
 
             var xmlNodeList_NodeRef = xmlNode_Way.SelectNodes("nd");
-            NativeArray<OSMNodeData> osmNodeDataArray = new NativeArray<OSMNodeData>(xmlNodeList_NodeRef.Count, Allocator.Persistent);
 
             for (int j = 0; j < xmlNodeList_NodeRef.Count; j++)
             {
                 var nodeID = int.Parse(xmlNodeList_NodeRef[j].Attributes["ref"].Value);
-                osmNodeDataArray[j] = NodeOsmDataArray[nodeID];
+                WayOsmNodeRefDataList.Add(nodeID);
             }
 
             OSMWayDataFlag osmWayDataFlag = OSMWayDataFlag.None;
 
-
+            //Assign WayDataFlag Values
             foreach (XmlNode xmlTag in xmlNode_Way.SelectNodes("tag"))
             {
                 switch (xmlTag.Attributes["k"].Value)
@@ -141,9 +145,12 @@ public class XMLLoadInitializer : MonoBehaviour
             WayOsmDataArray[i] = new OSMWayData
             {
                 Id = wayID,
-                OSMNodeDataArray = osmNodeDataArray,
-                OSMWayDataFlag = osmWayDataFlag
+                OSMWayDataFlag = osmWayDataFlag,
+                NodeRefSlice_Start = nodeRefSlicCounter,
+                NodeRefSlice_End = WayOsmNodeRefDataList.Length - 1
             };
+
+            nodeRefSlicCounter = WayOsmNodeRefDataList.Length;
         }
     }
 }
