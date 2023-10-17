@@ -7,4 +7,5 @@ using UnityEngine;
 public struct OSMLoadComponent : IComponentData
 {
     public NativeArray<OSMNodeData> OSMNodeDataArray;
+    public NativeArray<OSMWayData> OSMWayDataArray;
 }

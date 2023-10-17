@@ -37,7 +37,8 @@ public class XMLLoadInitializer : MonoBehaviour
         //Spawn Entity
         var OsmLoadComponent = new OSMLoadComponent
         {
-            OSMNodeDataArray = this.NodeOsmDataArray
+            OSMNodeDataArray = this.NodeOsmDataArray,
+            OSMWayDataArray = this.WayOsmDataArray
         };
         
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
