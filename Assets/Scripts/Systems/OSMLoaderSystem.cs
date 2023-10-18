@@ -28,33 +28,48 @@ public partial struct OSMLoaderSystem : ISystem
             .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
         var ECBParallelForWay = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
             .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
+        var ECBParallelForLanelet = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
+            .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
 
         var osmLoadComponent = SystemAPI.GetSingleton<OSMLoadComponent>();
         var osmLoadComponentEntity = SystemAPI.GetSingletonEntity<OSMLoadComponent>();
         
         var osmPrefabProperties = SystemAPI.GetSingleton<OSMPrefabProperties>();
 
-        ECBParallelForNode.DestroyEntity(0, osmLoadComponentEntity);
+        SystemAPI.GetSingleton<BeginPresentationEntityCommandBufferSystem.Singleton>()
+            .CreateCommandBuffer(state.WorldUnmanaged)
+            .DestroyEntity(osmLoadComponentEntity);
         
         var nodeInstantiateParallelJobHANDLE = new NodeInstantiateParallelJob
         {
             sortKey = 0,
             ECB = ECBParallelForNode,
             NodeEntityPrefab = osmPrefabProperties.OSMNodePrefabEntity,
-            OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray
+            OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
+            NodeSize = osmPrefabProperties.NodeSize
         }.Schedule(osmLoadComponent.OSMNodeDataArray.Length, osmLoadComponent.OSMNodeDataArray.Length / 4,
             state.Dependency);
 
         var wayInstantiateParallelJobHANDLE = new WayInstantiateParallelJob
         {
-            sortKey = 1,
+            sortKey = 0,
             ECB = ECBParallelForWay,
             OsmWayDataArray = osmLoadComponent.OSMWayDataArray,
             OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
             OsmWayNodeRefDataList = osmLoadComponent.OSMWayNodeRefDataList
         }.Schedule(osmLoadComponent.OSMWayDataArray.Length, osmLoadComponent.OSMWayDataArray.Length / 4, state.Dependency);
+        
+        var laneletInstantiateParallelJobHANDLE = new LaneletInstantiateParallelJob
+        {
+            sortKey = 0,
+            ECB = ECBParallelForLanelet,
+            LaneletEntityPrefab = osmPrefabProperties.OSMLaneletPrefabEntity,
+            OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
+            OsmWayDataArray = osmLoadComponent.OSMWayDataArray,
+            OsmLaneletDataArray = osmLoadComponent.OSMLaneletDataArray,
+            OsmWayNodeRefDataList = osmLoadComponent.OSMWayNodeRefDataList,
+        }.Schedule(osmLoadComponent.OSMLaneletDataArray.Length, osmLoadComponent.OSMLaneletDataArray.Length / 4, state.Dependency);
 
-        // state.Dependency = nodeInstantiateParallelJobHANDLE;
-        state.Dependency = JobHandle.CombineDependencies(nodeInstantiateParallelJobHANDLE, wayInstantiateParallelJobHANDLE);
+        state.Dependency = JobHandle.CombineDependencies(nodeInstantiateParallelJobHANDLE, wayInstantiateParallelJobHANDLE, laneletInstantiateParallelJobHANDLE);
     }
 }

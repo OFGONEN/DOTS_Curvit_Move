@@ -11,6 +11,7 @@ public struct NodeInstantiateParallelJob : IJobParallelFor
     [ReadOnly] public NativeArray<OSMNodeData> OsmNodeDataArray;
     [ReadOnly] public Entity NodeEntityPrefab;
     [ReadOnly] public int sortKey;
+    [ReadOnly] public float NodeSize;
     public EntityCommandBuffer.ParallelWriter ECB;
     
     [BurstCompile]
@@ -29,7 +30,7 @@ public struct NodeInstantiateParallelJob : IJobParallelFor
         {
             Position = osmNodeData.Position,
             Rotation = quaternion.identity,
-            Scale = 1
+            Scale = NodeSize
         });
     }
 }

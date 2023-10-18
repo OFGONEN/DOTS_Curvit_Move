@@ -12,15 +12,19 @@ public class XMLLoadInitializer : MonoBehaviour
     
     private NativeArray<OSMNodeData> NodeOsmDataArray;
     private NativeArray<OSMWayData> WayOsmDataArray;
-    private NativeList<int> WayOsmNodeRefDataList;
+    private NativeArray<OSMLaneletData> LaneletOsmDataArray;
+    private NativeList<int> WayOsmNodeRefDataList; // Node ID Reference List for Ways
 
+    private XmlNode XMLNode_OSM;
     private XmlNodeList XMLNodeList_Node;
     private XmlNodeList XMLNodeList_Way;
+    private XmlNodeList XMLNodeList_Lanelet;
 
     private void OnDisable()
     {
         NodeOsmDataArray.Dispose();
         WayOsmDataArray.Dispose();
+        LaneletOsmDataArray.Dispose();
         WayOsmNodeRefDataList.Dispose();
     }
 
@@ -29,19 +33,18 @@ public class XMLLoadInitializer : MonoBehaviour
     {
         var xmlDocument = new XmlDocument();
         xmlDocument.Load(OsmPath);
-            
-        var xmlNodeOsm = xmlDocument.SelectSingleNode("osm");
-        XMLNodeList_Node = xmlNodeOsm.SelectNodes("node");
-        XMLNodeList_Way = xmlNodeOsm.SelectNodes("way");
+        XMLNode_OSM = xmlDocument.SelectSingleNode("osm");
         
         ReadOSMNodeData();
         ReadOSMWayData();
+        ReadLaneletData();
         
         //Spawn Entity
         var OsmLoadComponent = new OSMLoadComponent
         {
             OSMNodeDataArray = this.NodeOsmDataArray,
             OSMWayDataArray = this.WayOsmDataArray,
+            OSMLaneletDataArray = this.LaneletOsmDataArray,
             OSMWayNodeRefDataList = this.WayOsmNodeRefDataList
         };
         
@@ -53,6 +56,7 @@ public class XMLLoadInitializer : MonoBehaviour
 
     private void ReadOSMNodeData()
     {
+        XMLNodeList_Node = XMLNode_OSM.SelectNodes("node");
         NodeOsmDataArray = new NativeArray<OSMNodeData>(XMLNodeList_Node.Count, Allocator.Persistent);
 
         for (int i = 0; i < XMLNodeList_Node.Count; i++)
@@ -88,6 +92,8 @@ public class XMLLoadInitializer : MonoBehaviour
 
     private void ReadOSMWayData()
     {
+        XMLNodeList_Way = XMLNode_OSM.SelectNodes("way");
+        
         WayOsmDataArray = new NativeArray<OSMWayData>(XMLNodeList_Way.Count, Allocator.Persistent);
         WayOsmNodeRefDataList = new NativeList<int>(XMLNodeList_Way.Count * 12, Allocator.Persistent);
 
@@ -153,6 +159,99 @@ public class XMLLoadInitializer : MonoBehaviour
             };
 
             nodeRefSliceCounter = WayOsmNodeRefDataList.Length;
+        }
+    }
+
+    private void ReadLaneletData()
+    {
+        XMLNodeList_Lanelet = XMLNode_OSM.SelectNodes("relation");
+        
+        LaneletOsmDataArray = new NativeArray<OSMLaneletData>(XMLNodeList_Lanelet.Count, Allocator.Persistent);
+
+        for (int i = 0; i < XMLNodeList_Lanelet.Count; i++)
+        {
+            var xmlLaneletNode = XMLNodeList_Lanelet[i];
+            
+            OSMLaneletData osmLaneletData= new OSMLaneletData();
+            osmLaneletData.ID = int.Parse(xmlLaneletNode.Attributes["id"].Value);
+            
+            foreach (XmlNode tag in xmlLaneletNode.SelectNodes("tag"))
+            {
+                switch (tag.Attributes["k"].Value)
+                {
+                    case "subtype":
+                        switch (tag.Attributes["v"].Value)
+                        {
+                            case "bicycle_lane":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TypeBicyclelane;
+                                break;
+                            case "crosswalk":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TypeCrosswalk;
+                                break;
+                            default:
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TypeRoad;
+                                break;
+                        }
+                        break;
+                    case "turn_direction":
+                        switch (tag.Attributes["v"].Value)
+                        {
+                            case "straight":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TurnStraight;
+                                break;
+                            case "left":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TurnLeft;
+                                break;
+                            case "right":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TurnRight;
+                                break;
+                        }
+                        break;
+                    case "reverse_line":
+                        switch (tag.Attributes["v"].Value)
+                        {
+                            case "left":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.ReverseLeft;
+                                break;
+                            case "right":
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.ReverseRight;
+                                break;
+                            default:
+                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.ReverseNone;
+                                break;
+                        }
+                        break;
+                    case "speed_limit":
+                        osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.SpeedLimitTrue;
+                        osmLaneletData.SpeedLimit = int.Parse(tag.Attributes["v"].Value);
+                        break;
+                }
+            }
+
+            foreach (XmlNode member in xmlLaneletNode.SelectNodes("member"))
+            {
+                if (member.Attributes["type"].Value == "way")
+                {
+                    var wayID = int.Parse(member.Attributes["ref"].Value);
+
+                    osmLaneletData.WayReference_Middle = -1;
+
+                    switch (member.Attributes["role"].Value)
+                    {
+                        case "left":
+                            osmLaneletData.WayReference_Left = wayID;
+                            break;
+                        case "right":
+                            osmLaneletData.WayReference_Right = wayID;
+                            break;
+                        case "centerline":
+                            osmLaneletData.WayReference_Middle = wayID;
+                            break;
+                    }
+                }
+            }
+
+            LaneletOsmDataArray[i] = osmLaneletData;
         }
     }
 }
