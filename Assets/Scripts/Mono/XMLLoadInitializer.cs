@@ -205,9 +205,6 @@ public class XMLLoadInitializer : MonoBehaviour
                             case "right":
                                 osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TurnRight;
                                 break;
-                            default:
-                                osmLaneletData.OsmLaneletDataFlag |= OSMLaneletDataFlag.TurnNone;
-                                break;
                         }
                         break;
                     case "reverse_line":

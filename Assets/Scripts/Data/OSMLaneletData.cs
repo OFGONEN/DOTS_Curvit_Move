@@ -21,7 +21,6 @@ public enum OSMLaneletDataFlag
     TypeCrosswalk,
     TypeBicyclelane,
     //Turn Direction
-    TurnNone,
     TurnStraight,
     TurnLeft,
     TurnRight,

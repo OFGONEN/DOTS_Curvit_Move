@@ -31,23 +31,5 @@ public struct LaneletInstantiateParallelJob : IJobParallelFor
             WayReference_Right = laneletData.WayReference_Right,
             WayReference_Middle = laneletData.WayReference_Middle
         });
-        
-        //Cache Way Data
-        var leftWay = OsmWayDataArray[laneletData.WayReference_Left - FirstWayId];
-        var rightWay = OsmWayDataArray[laneletData.WayReference_Right - FirstWayId];
-
-        //Cache Node Datas
-        NativeArray<OSMNodeData> leftNodeDataArray = new NativeArray<OSMNodeData>(leftWay.NodeRefCount, Allocator.Temp);
-        NativeArray<OSMNodeData> rightNodeDataArray = new NativeArray<OSMNodeData>(rightWay.NodeRefCount, Allocator.Temp);
-        
-        for (int i = 0; i < leftNodeDataArray.Length; i++)
-            leftNodeDataArray[i] = OsmNodeDataArray[OsmWayNodeRefDataList[leftWay.NodeRefSlice_Start + i] - 1];
-        
-        for (int i = 0; i < rightNodeDataArray.Length; i++)
-            rightNodeDataArray[i] = OsmNodeDataArray[OsmWayNodeRefDataList[rightWay.NodeRefSlice_Start + i] - 1];
-        
-        //Create Mesh
-        
-        //Assign Mesh
     }
 }
