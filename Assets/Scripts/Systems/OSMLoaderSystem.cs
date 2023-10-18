@@ -36,7 +36,9 @@ public partial struct OSMLoaderSystem : ISystem
         
         var osmPrefabProperties = SystemAPI.GetSingleton<OSMPrefabProperties>();
 
-        ECBParallelForNode.DestroyEntity(0, osmLoadComponentEntity);
+        SystemAPI.GetSingleton<BeginPresentationEntityCommandBufferSystem.Singleton>()
+            .CreateCommandBuffer(state.WorldUnmanaged)
+            .DestroyEntity(osmLoadComponentEntity);
         
         var nodeInstantiateParallelJobHANDLE = new NodeInstantiateParallelJob
         {

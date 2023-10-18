@@ -44,7 +44,7 @@ public class XMLLoadInitializer : MonoBehaviour
         {
             OSMNodeDataArray = this.NodeOsmDataArray,
             OSMWayDataArray = this.WayOsmDataArray,
-            OSMLaneletDataArray = LaneletOsmDataArray,
+            OSMLaneletDataArray = this.LaneletOsmDataArray,
             OSMWayNodeRefDataList = this.WayOsmNodeRefDataList
         };
         
