@@ -63,7 +63,7 @@ public partial struct OSMLoaderSystem : ISystem
         {
             sortKey = 0,
             ECB = ECBParallelForLanelet,
-            // LaneletEntityPrefab = osmPrefabProperties.OSMLaneletPrefabEntity,
+            LaneletEntityPrefab = osmPrefabProperties.OSMLaneletPrefabEntity,
             OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
             OsmWayDataArray = osmLoadComponent.OSMWayDataArray,
             OsmLaneletDataArray = osmLoadComponent.OSMLaneletDataArray,

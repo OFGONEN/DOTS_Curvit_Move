@@ -10,7 +10,7 @@ public struct LaneletInstantiateParallelJob : IJobParallelFor
     [ReadOnly] public NativeArray<OSMWayData> OsmWayDataArray;
     [ReadOnly] public NativeArray<OSMLaneletData> OsmLaneletDataArray;
     [ReadOnly] public NativeList<int> OsmWayNodeRefDataList;
-    // [ReadOnly] public Entity LaneletEntityPrefab;
+    [ReadOnly] public Entity LaneletEntityPrefab;
     [ReadOnly] public int sortKey;
     
     public EntityCommandBuffer.ParallelWriter ECB;
@@ -18,7 +18,8 @@ public struct LaneletInstantiateParallelJob : IJobParallelFor
     [BurstCompile]
     public void Execute(int index)
     {
-        var entity = ECB.CreateEntity(sortKey);
+        // var entity = ECB.CreateEntity(sortKey);
+        var entity = ECB.Instantiate(sortKey, LaneletEntityPrefab);
         var laneletData = OsmLaneletDataArray[index];
         
         ECB.AddComponent<LaneletComponent>(sortKey, entity, new LaneletComponent

@@ -4,7 +4,7 @@ using UnityEngine;
 public class OSMPrefabAuthoring : MonoBehaviour
 {
     public GameObject OSMNodePrefab;
-    // public GameObject OSMLaneletPrefab;
+    public GameObject OSMLaneletPrefab;
 
     public float NodeSize;
     
@@ -14,7 +14,7 @@ public class OSMPrefabAuthoring : MonoBehaviour
         {
             //Dependencies
             DependsOn(authoring.OSMNodePrefab);
-            // DependsOn(authoring.OSMLaneletPrefab);
+            DependsOn(authoring.OSMLaneletPrefab);
 
             if (authoring.OSMNodePrefab == null /*|| authoring.OSMLaneletPrefab == null*/)
             {
@@ -24,7 +24,7 @@ public class OSMPrefabAuthoring : MonoBehaviour
             
             //Prefab Entities
             var NodePrefabEntity = GetEntity(authoring.OSMNodePrefab, TransformUsageFlags.Dynamic);
-            // var LaneletPrefabEntity = GetEntity(authoring.OSMLaneletPrefab, TransformUsageFlags.Renderable);
+            var LaneletPrefabEntity = GetEntity(authoring.OSMLaneletPrefab, TransformUsageFlags.Renderable);
             
             //Instantiated Entities
             var osmPrefabPropertyEntity = GetEntity(TransformUsageFlags.None);
@@ -32,7 +32,7 @@ public class OSMPrefabAuthoring : MonoBehaviour
             AddComponent(osmPrefabPropertyEntity, new OSMPrefabProperties
             {
                 OSMNodePrefabEntity = NodePrefabEntity,
-                // OSMLaneletPrefabEntity = LaneletPrefabEntity,
+                OSMLaneletPrefabEntity = LaneletPrefabEntity,
                 NodeSize = authoring.NodeSize
             });
         }
