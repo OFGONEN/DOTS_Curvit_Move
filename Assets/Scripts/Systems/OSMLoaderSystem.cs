@@ -28,6 +28,8 @@ public partial struct OSMLoaderSystem : ISystem
             .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
         var ECBParallelForWay = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
             .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
+        var ECBParallelForLanelet = SystemAPI.GetSingleton<EndInitializationEntityCommandBufferSystem.Singleton>()
+            .CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
 
         var osmLoadComponent = SystemAPI.GetSingleton<OSMLoadComponent>();
         var osmLoadComponentEntity = SystemAPI.GetSingletonEntity<OSMLoadComponent>();
@@ -48,14 +50,25 @@ public partial struct OSMLoaderSystem : ISystem
 
         var wayInstantiateParallelJobHANDLE = new WayInstantiateParallelJob
         {
-            sortKey = 1,
+            sortKey = 0,
             ECB = ECBParallelForWay,
             OsmWayDataArray = osmLoadComponent.OSMWayDataArray,
             OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
             OsmWayNodeRefDataList = osmLoadComponent.OSMWayNodeRefDataList
         }.Schedule(osmLoadComponent.OSMWayDataArray.Length, osmLoadComponent.OSMWayDataArray.Length / 4, state.Dependency);
+        
+        var laneletInstantiateParallelJobHANDLE = new LaneletInstantiateParallelJob
+        {
+            sortKey = 0,
+            ECB = ECBParallelForLanelet,
+            LaneletEntityPrefab = osmPrefabProperties.OSMLaneletPrefabEntity,
+            OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
+            OsmWayDataArray = osmLoadComponent.OSMWayDataArray,
+            OsmLaneletDataArray = osmLoadComponent.OSMLaneletDataArray,
+            OsmWayNodeRefDataList = osmLoadComponent.OSMWayNodeRefDataList,
+            FirstWayId = osmLoadComponent.OSMWayDataArray[0].Id  
+        }.Schedule(osmLoadComponent.OSMLaneletDataArray.Length, osmLoadComponent.OSMLaneletDataArray.Length / 4, state.Dependency);
 
-        // state.Dependency = nodeInstantiateParallelJobHANDLE;
-        state.Dependency = JobHandle.CombineDependencies(nodeInstantiateParallelJobHANDLE, wayInstantiateParallelJobHANDLE);
+        state.Dependency = JobHandle.CombineDependencies(nodeInstantiateParallelJobHANDLE, wayInstantiateParallelJobHANDLE, laneletInstantiateParallelJobHANDLE);
     }
 }
