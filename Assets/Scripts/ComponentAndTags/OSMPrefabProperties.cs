@@ -5,4 +5,5 @@ using UnityEngine;
 public struct OSMPrefabProperties : IComponentData
 {
     public Entity OSMNodePrefabEntity;
+    public Entity OSMLaneletPrefabEntity;
 }
