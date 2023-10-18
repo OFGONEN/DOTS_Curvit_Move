@@ -63,12 +63,11 @@ public partial struct OSMLoaderSystem : ISystem
         {
             sortKey = 0,
             ECB = ECBParallelForLanelet,
-            LaneletEntityPrefab = osmPrefabProperties.OSMLaneletPrefabEntity,
+            // LaneletEntityPrefab = osmPrefabProperties.OSMLaneletPrefabEntity,
             OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
             OsmWayDataArray = osmLoadComponent.OSMWayDataArray,
             OsmLaneletDataArray = osmLoadComponent.OSMLaneletDataArray,
             OsmWayNodeRefDataList = osmLoadComponent.OSMWayNodeRefDataList,
-            FirstWayId = osmLoadComponent.OSMWayDataArray[0].Id  
         }.Schedule(osmLoadComponent.OSMLaneletDataArray.Length, osmLoadComponent.OSMLaneletDataArray.Length / 4, state.Dependency);
 
         state.Dependency = JobHandle.CombineDependencies(nodeInstantiateParallelJobHANDLE, wayInstantiateParallelJobHANDLE, laneletInstantiateParallelJobHANDLE);
