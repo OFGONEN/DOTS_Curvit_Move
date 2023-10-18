@@ -5,6 +5,8 @@ public class OSMPrefabAuthoring : MonoBehaviour
 {
     public GameObject OSMNodePrefab;
     public GameObject OSMLaneletPrefab;
+
+    public float NodeSize;
     
     class OSMPrefabBaker : Baker<OSMPrefabAuthoring>
     {
@@ -31,7 +33,8 @@ public class OSMPrefabAuthoring : MonoBehaviour
             AddComponent(osmPrefabPropertyEntity, new OSMPrefabProperties
             {
                 OSMNodePrefabEntity = NodePrefabEntity,
-                OSMLaneletPrefabEntity = LaneletPrefabEntity
+                OSMLaneletPrefabEntity = LaneletPrefabEntity,
+                NodeSize = authoring.NodeSize
             });
         }
     }

@@ -41,7 +41,8 @@ public partial struct OSMLoaderSystem : ISystem
             sortKey = 0,
             ECB = ECBParallelForNode,
             NodeEntityPrefab = osmPrefabProperties.OSMNodePrefabEntity,
-            OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray
+            OsmNodeDataArray = osmLoadComponent.OSMNodeDataArray,
+            NodeSize = osmPrefabProperties.NodeSize
         }.Schedule(osmLoadComponent.OSMNodeDataArray.Length, osmLoadComponent.OSMNodeDataArray.Length / 4,
             state.Dependency);
 
