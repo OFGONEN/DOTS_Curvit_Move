@@ -154,6 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OSMNodePrefab: {fileID: 121903086412216286, guid: 8391ed20f7f412344a0195744dd129c3,
     type: 3}
+  OSMLaneletPrefab: {fileID: 3979860742462918241, guid: 35a9e0bcd58177d468c88cc25ade6eb3,
+    type: 3}
 --- !u!4 &2049984185
 Transform:
   m_ObjectHideFlags: 0
