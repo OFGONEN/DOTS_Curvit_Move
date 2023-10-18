@@ -68,9 +68,5 @@ public partial struct OSMLaneletMeshLoaderSystem : ISystem
             var meshArray = new RenderMeshArray(new[] { material }, new[] { mesh });
             RenderMeshUtility.AddComponents(entity, state.EntityManager, desc, meshArray, materialMeshInfo);
         }
-
-        var elapsed = XMLLoadInitializer.stopwatch.Elapsed;
-        var elapsedTime = elapsed.Minutes + "m " + elapsed.Seconds + "s " + elapsed.Milliseconds + "ms";
-        Debug.Log("Import time: "+ elapsedTime);
     }
 }
