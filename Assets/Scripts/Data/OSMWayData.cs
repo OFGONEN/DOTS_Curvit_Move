@@ -1,6 +1,4 @@
 using System;
-using Unity.Collections;
-using UnityEngine;
 
 public struct OSMWayData
 {
@@ -16,7 +14,9 @@ public struct OSMWayData
 public enum OSMWayDataFlag
 {
     None,
+    //Way Type
     Solid,
     Dashed,
+    //Direction
     Bidirectional
 }

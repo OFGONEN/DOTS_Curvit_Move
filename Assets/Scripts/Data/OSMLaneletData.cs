@@ -29,6 +29,5 @@ public enum OSMLaneletDataFlag
     ReverseNone,
     ReverseLeft,
     ReverseRight,
-    SpeedLimitNone,
-    SppedLimitTrue
+    SpeedLimitTrue
 }
