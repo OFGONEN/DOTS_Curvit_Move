@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 [UpdateAfter(typeof(OSMLoaderSystem))]
-public partial class OSMWayLineLoaderSystem : SystemBase
+[BurstCompile]
+public partial struct OSMWayLineLoaderSystem : ISystem
 {
-    protected override void OnCreate()
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
     {
-        RequireForUpdate<OSMLoadComponent>();
+        state.RequireForUpdate<OSMLoadComponent>();
     }
 
-    protected override void OnUpdate()
+    [BurstCompile]
+    public void OnDestroy(ref SystemState state)
+    {
+    }
+
+    [BurstCompile]
+    public void OnUpdate(ref SystemState state)
     {
         var osmLoadComponent = SystemAPI.GetSingleton<OSMLoadComponent>();
         
