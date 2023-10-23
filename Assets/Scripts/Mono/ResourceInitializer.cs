@@ -74,7 +74,7 @@ public class ResourceInitializer : MonoBehaviour
         var materialMeshInfo = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
         
         //Resource
-        var mesh = Resources.GetBuiltinResource<Mesh>("Plane.fbx");
+        Mesh mesh = MeshExtensions.CreateSimpleQuad(1, 1, "lanelet_procedural");
         var material = Resources.Load<Material>("Materials/MAT_Lanelet");
         
         var laneletEntityPrefab = entityManager.CreateEntity();
