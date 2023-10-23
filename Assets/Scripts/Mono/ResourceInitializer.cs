@@ -16,6 +16,15 @@ public class ResourceInitializer : MonoBehaviour
         var nodeEntityPrefab = CreateNodeEntityPrefab(entityManager);
         var wayEntityPrefab = CreateWayEntityPrefab(entityManager);
         var laneletEntityPrefab = CreateLaneletEntityPrefab(entityManager);
+
+        var curvitPrefabData = entityManager.CreateEntity();
+        entityManager.AddComponentData<CurvitPrefabData>(curvitPrefabData, new CurvitPrefabData
+        {
+            NodeEntityPrefab = nodeEntityPrefab,
+            WayEntityPrefab = wayEntityPrefab,
+            LaneletEntityPrefab = laneletEntityPrefab,
+            NodeEntityScale = NodeEntityScale
+        });
     }
 
     Entity CreateNodeEntityPrefab(EntityManager entityManager)
