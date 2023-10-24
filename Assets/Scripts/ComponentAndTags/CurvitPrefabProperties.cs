@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-public struct CurvitPrefabData : IComponentData
+public struct CurvitPrefabProperties : IComponentData
 {
     public Entity NodeEntityPrefab;
     public Entity WayEntityPrefab;

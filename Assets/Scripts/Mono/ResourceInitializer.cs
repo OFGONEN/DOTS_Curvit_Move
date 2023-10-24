@@ -18,7 +18,7 @@ public class ResourceInitializer : MonoBehaviour
         var laneletEntityPrefab = CreateLaneletEntityPrefab(entityManager);
 
         var curvitPrefabData = entityManager.CreateEntity();
-        entityManager.AddComponentData<CurvitPrefabData>(curvitPrefabData, new CurvitPrefabData
+        entityManager.AddComponentData<CurvitPrefabProperties>(curvitPrefabData, new CurvitPrefabProperties
         {
             NodeEntityPrefab = nodeEntityPrefab,
             WayEntityPrefab = wayEntityPrefab,
