@@ -3,7 +3,9 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
+[BurstCompile]
 [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
+[UpdateAfter(typeof(BeginSimulationEntityCommandBufferSystem))]
 public partial struct WayVisualBuilderSystem : ISystem
 {
     [BurstCompile]
@@ -33,9 +35,9 @@ public partial struct WayVisualBuilderSystem : ISystem
 
             for (int i = 0; i < nodeReferenceBuffer.Length; i++)
                 lineRendererForWay.SetPosition(i,
-                    SystemAPI.GetComponent<NodeData>(nodeReferenceBuffer[i].NodeEntity).Position);
+                    SystemAPI.GetComponentRO<NodeData>(nodeReferenceBuffer[i].NodeEntity).ValueRO.Position);
 
-            LineRendererWayEntityReference.ReferenceDictionary.Add(wayData.ValueRO.ID, lineRendererForWay);
+            StaticResources.WayToLineRendererDictionary.Add(wayData.ValueRO.ID, lineRendererForWay);
             ECB.RemoveComponent<BuildVisualTag>(wayEntity);
         }
     }

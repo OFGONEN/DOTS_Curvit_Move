@@ -8,6 +8,7 @@ using Unity.Transforms;
 
 [BurstCompile]
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderFirst = true)]
+[UpdateAfter(typeof(BeginInitializationEntityCommandBufferSystem))]
 public partial struct OSMLoaderSystem : ISystem
 {
     public NativeHashMap<uint, Entity> nodeHashMap;
@@ -97,7 +98,7 @@ public partial struct OSMLoaderSystem : ISystem
     void CreateWayEntities(EntityCommandBuffer ecb, XmlNodeList wayList, Entity wayEntityPrefab)
     {
         wayHashMap = new NativeHashMap<uint, Entity>(wayList.Count, Allocator.Persistent);
-        LineRendererWayEntityReference.ReferenceDictionary =
+        StaticResources.WayToLineRendererDictionary =
             new Dictionary<uint, LineRendererWayEntityReference>(wayList.Count);
 
         for (int i = 0; i < wayList.Count; i++)
@@ -133,6 +134,9 @@ public partial struct OSMLoaderSystem : ISystem
 
     void CreateLaneletEntities(EntityCommandBuffer ecb, XmlNodeList laneletList, Entity laneletEntityPrefab)
     {
+        StaticResources.LaneletToMeshDictionary =
+            new Dictionary<uint, LaneletMeshReference>(laneletList.Count);
+        
         for (int i = 0; i < laneletList.Count; i++)
         {
             var xmlLaneletNode = laneletList[i];
