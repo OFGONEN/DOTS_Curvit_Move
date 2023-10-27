@@ -1,10 +1,10 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Xml;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEditor;
 
 [BurstCompile]
 [UpdateInGroup(typeof(InitializationSystemGroup), OrderFirst = true)]
@@ -97,6 +97,8 @@ public partial struct OSMLoaderSystem : ISystem
     void CreateWayEntities(EntityCommandBuffer ecb, XmlNodeList wayList, Entity wayEntityPrefab)
     {
         wayHashMap = new NativeHashMap<uint, Entity>(wayList.Count, Allocator.Persistent);
+        LineRendererWayEntityReference.ReferenceDictionary =
+            new Dictionary<int, LineRendererWayEntityReference>(wayList.Count);
 
         for (int i = 0; i < wayList.Count; i++)
         {
