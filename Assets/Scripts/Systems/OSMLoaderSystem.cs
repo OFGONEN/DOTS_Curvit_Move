@@ -98,7 +98,7 @@ public partial struct OSMLoaderSystem : ISystem
     {
         wayHashMap = new NativeHashMap<uint, Entity>(wayList.Count, Allocator.Persistent);
         LineRendererWayEntityReference.ReferenceDictionary =
-            new Dictionary<int, LineRendererWayEntityReference>(wayList.Count);
+            new Dictionary<uint, LineRendererWayEntityReference>(wayList.Count);
 
         for (int i = 0; i < wayList.Count; i++)
         {
@@ -126,6 +126,7 @@ public partial struct OSMLoaderSystem : ISystem
                 ecb.AppendToBuffer(nodeEntity, new WayReferenceBufferData{ WayEntity = wayEntity });
             }
 
+            ecb.AddComponent<BuildVisualTag>(wayEntity);
             wayHashMap.Add(id, wayEntity);
         }
     }
@@ -169,6 +170,7 @@ public partial struct OSMLoaderSystem : ISystem
             }
             
             ecb.AddComponent(laneletEntity, laneletData);
+            ecb.AddComponent<BuildVisualTag>(laneletEntity);
         }
     }
 }

@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 46231255}
   - component: {fileID: 46231254}
   m_Layer: 0
-  m_Name: ResourceLoader
+  m_Name: ResourceAutoLoader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -517,7 +517,7 @@ GameObject:
   - component: {fileID: 1466753856}
   - component: {fileID: 1466753855}
   m_Layer: 0
-  m_Name: ResourceInitializer
+  m_Name: ResourceAutoInitializer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -562,7 +562,7 @@ GameObject:
   - component: {fileID: 1712060180}
   - component: {fileID: 1712060181}
   m_Layer: 0
-  m_Name: OSMLoader
+  m_Name: OSMLoadInitializer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

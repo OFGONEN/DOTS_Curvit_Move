@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LineRendererWayEntityReference : MonoBehaviour
 {
-    public static Dictionary<int, LineRendererWayEntityReference> ReferenceDictionary;
+    public static Dictionary<uint, LineRendererWayEntityReference> ReferenceDictionary;
     
     [SerializeField]
     private LineRenderer lineRenderer;

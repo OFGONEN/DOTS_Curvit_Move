@@ -5,7 +5,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class ResourceInitializer : MonoBehaviour
+public class ResourceAutoInitializer : MonoBehaviour
 {
     public float NodeEntityScale = 1;
     

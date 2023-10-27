@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ResourceLoader : MonoBehaviour
+public class ResourceAutoLoader : MonoBehaviour
 {
     private void Awake()
     {
