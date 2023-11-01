@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Xml;
 using TMPro;
 using Unity.Burst;
@@ -11,15 +12,21 @@ public class OSMLoadInitializer : MonoBehaviour
 {
     public string OSMFilePath;
 
+    private void Start()
+    {
+        InitializeLoadingOSM();
+    }
+
     [ContextMenu("Initialize Loading OSM")]
     public void InitializeLoadingOSM()
     {
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var entity = entityManager.CreateEntity();
+        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "dots_move_test.osm");
         
         entityManager.AddComponentData<OSMLoadPathData>(entity, new OSMLoadPathData
         {
-            OSMLoadPath = new FixedString512Bytes(OSMFilePath)
+            OSMLoadPath = new FixedString512Bytes(path)
         });
     }
 }
