@@ -22,7 +22,7 @@ public class OSMLoadInitializer : MonoBehaviour
     {
         var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         var entity = entityManager.CreateEntity();
-        var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "dots_move_test.osm");
+        var path = Path.Combine(Application.dataPath, "dots_move_test.osm");
         
         entityManager.AddComponentData<OSMLoadPathData>(entity, new OSMLoadPathData
         {
