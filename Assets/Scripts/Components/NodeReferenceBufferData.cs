@@ -1,7 +1,10 @@
 using Unity.Entities;
 
-[InternalBufferCapacity(8)]
-public struct NodeReferenceBufferData : IBufferElementData
+namespace Curvit.Demos.DOTS_Move
 {
-    public Entity NodeEntity;
+    [InternalBufferCapacity(8)]
+    public struct NodeReferenceBufferData : IBufferElementData
+    {
+        public Entity NodeEntity;
+    }
 }

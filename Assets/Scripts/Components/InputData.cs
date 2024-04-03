@@ -1,7 +1,10 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
 
-public struct InputData : IComponentData
+namespace Curvit.Demos.DOTS_Move
 {
-    public float2 InputDirection;
+    public struct InputData : IComponentData
+    {
+        public float2 InputDirection;
+    }
 }

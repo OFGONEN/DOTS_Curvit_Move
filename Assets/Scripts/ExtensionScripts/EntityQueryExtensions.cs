@@ -1,13 +1,16 @@
 using Unity.Entities;
 
-public static class EntityQueryExtensions
+namespace Curvit.Demos.DOTS_Move
 {
-    public static T GetClassSingleton<T>(this EntityManager entityManager)
+    public static class EntityQueryExtensions
     {
-        var entity = entityManager
-            .CreateEntityQuery(typeof(T))
-            .GetSingletonEntity();
-     
-        return entityManager.GetComponentObject<T>(entity);
+        public static T GetClassSingleton<T>(this EntityManager entityManager)
+        {
+            var entity = entityManager
+                .CreateEntityQuery(typeof(T))
+                .GetSingletonEntity();
+
+            return entityManager.GetComponentObject<T>(entity);
+        }
     }
 }

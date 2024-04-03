@@ -5,9 +5,12 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public struct LaneletData : IComponentData
+namespace Curvit.Demos.DOTS_Move
 {
-    public uint ID;
-    public Entity LeftWay;
-    public Entity RightWay;
+    public struct LaneletData : IComponentData
+    {
+        public uint ID;
+        public Entity LeftWay;
+        public Entity RightWay;
+    }
 }

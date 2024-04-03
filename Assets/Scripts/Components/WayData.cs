@@ -1,6 +1,9 @@
 using Unity.Entities;
 
-public struct WayData : IComponentData
+namespace Curvit.Demos.DOTS_Move
 {
-    public uint ID;
+    public struct WayData : IComponentData
+    {
+        public uint ID;
+    }
 }

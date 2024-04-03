@@ -8,25 +8,28 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class OSMLoadInitializer : MonoBehaviour
+namespace Curvit.Demos.DOTS_Move
 {
-    public string OSMFilePath;
-
-    private void Start()
+    public class OSMLoadInitializer : MonoBehaviour
     {
-        InitializeLoadingOSM();
-    }
+        public string OSMFilePath;
 
-    [ContextMenu("Initialize Loading OSM")]
-    public void InitializeLoadingOSM()
-    {
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        var entity = entityManager.CreateEntity();
-        var path = Path.Combine(Application.dataPath, "dots_move_test.osm");
-        
-        entityManager.AddComponentData<OSMLoadPathData>(entity, new OSMLoadPathData
+        private void Start()
         {
-            OSMLoadPath = new FixedString512Bytes(path)
-        });
+            InitializeLoadingOSM();
+        }
+
+        [ContextMenu("Initialize Loading OSM")]
+        public void InitializeLoadingOSM()
+        {
+            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            var entity = entityManager.CreateEntity();
+            var path = Path.Combine(Application.dataPath, "dots_move_test.osm");
+
+            entityManager.AddComponentData<OSMLoadPathData>(entity, new OSMLoadPathData
+            {
+                OSMLoadPath = new FixedString512Bytes(path)
+            });
+        }
     }
 }

@@ -1,11 +1,14 @@
 using Unity.Entities;
 using UnityEngine;
 
-public struct CurvitPrefabProperties : IComponentData
+namespace Curvit.Demos.DOTS_Move
 {
-    public Entity NodeEntityPrefab;
-    public Entity WayEntityPrefab;
-    public Entity LaneletEntityPrefab;
+    public struct CurvitPrefabProperties : IComponentData
+    {
+        public Entity NodeEntityPrefab;
+        public Entity WayEntityPrefab;
+        public Entity LaneletEntityPrefab;
 
-    public float NodeEntityScale;
+        public float NodeEntityScale;
+    }
 }

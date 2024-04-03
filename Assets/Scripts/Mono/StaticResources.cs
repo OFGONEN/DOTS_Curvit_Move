@@ -2,20 +2,23 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public static class StaticResources
+namespace Curvit.Demos.DOTS_Move
 {
-    public static Dictionary<uint, LineRendererWayEntityReference> WayToLineRendererDictionary;
-    public static Dictionary<uint, LaneletMeshReference> LaneletToMeshDictionary;
-}
-
-public struct LaneletMeshReference
-{
-    public Mesh Mesh;
-    public BatchMeshID MeshBatchID;
-
-    public LaneletMeshReference(Mesh mesh, BatchMeshID batchID)
+    public static class StaticResources
     {
-        Mesh = mesh;
-        MeshBatchID = batchID;
+        public static Dictionary<uint, LineRendererWayEntityReference> WayToLineRendererDictionary;
+        public static Dictionary<uint, LaneletMeshReference> LaneletToMeshDictionary;
+    }
+
+    public struct LaneletMeshReference
+    {
+        public Mesh Mesh;
+        public BatchMeshID MeshBatchID;
+
+        public LaneletMeshReference(Mesh mesh, BatchMeshID batchID)
+        {
+            Mesh = mesh;
+            MeshBatchID = batchID;
+        }
     }
 }

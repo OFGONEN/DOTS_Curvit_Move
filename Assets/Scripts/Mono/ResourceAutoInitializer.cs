@@ -5,97 +5,100 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class ResourceAutoInitializer : MonoBehaviour
+namespace Curvit.Demos.DOTS_Move
 {
-    public float NodeEntityScale = 1;
-    
-    private void Awake()
+    public class ResourceAutoInitializer : MonoBehaviour
     {
-        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        public float NodeEntityScale = 1;
 
-        var nodeEntityPrefab = CreateNodeEntityPrefab(entityManager);
-        var wayEntityPrefab = CreateWayEntityPrefab(entityManager);
-        var laneletEntityPrefab = CreateLaneletEntityPrefab(entityManager);
-
-        var curvitPrefabData = entityManager.CreateEntity();
-        entityManager.AddComponentData<CurvitPrefabProperties>(curvitPrefabData, new CurvitPrefabProperties
+        private void Awake()
         {
-            NodeEntityPrefab = nodeEntityPrefab,
-            WayEntityPrefab = wayEntityPrefab,
-            LaneletEntityPrefab = laneletEntityPrefab,
-            NodeEntityScale = NodeEntityScale
-        });
-    }
+            var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-    Entity CreateNodeEntityPrefab(EntityManager entityManager)
-    {
-        //Rendering
-        var description = new RenderMeshDescription(ShadowCastingMode.Off, false, MotionVectorGenerationMode.ForceNoMotion);
-        var materialMeshInfo = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
-        
-        //Resource
-        var mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
-        var material = Resources.Load<Material>("Materials/MAT_Node");
-        
-        var nodeEntityPrefab = entityManager.CreateEntity();
+            var nodeEntityPrefab = CreateNodeEntityPrefab(entityManager);
+            var wayEntityPrefab = CreateWayEntityPrefab(entityManager);
+            var laneletEntityPrefab = CreateLaneletEntityPrefab(entityManager);
 
-        RenderMeshUtility.AddComponents(
-            nodeEntityPrefab,
-            entityManager,
-            in description,
-            new RenderMeshArray(new[] { material }, new[] { mesh }),
-            materialMeshInfo
-        );
+            var curvitPrefabData = entityManager.CreateEntity();
+            entityManager.AddComponentData<CurvitPrefabProperties>(curvitPrefabData, new CurvitPrefabProperties
+            {
+                NodeEntityPrefab = nodeEntityPrefab,
+                WayEntityPrefab = wayEntityPrefab,
+                LaneletEntityPrefab = laneletEntityPrefab,
+                NodeEntityScale = NodeEntityScale
+            });
+        }
 
-        entityManager.AddComponentData(nodeEntityPrefab, new LocalTransform
+        Entity CreateNodeEntityPrefab(EntityManager entityManager)
+        {
+            //Rendering
+            var description = new RenderMeshDescription(ShadowCastingMode.Off, false, MotionVectorGenerationMode.ForceNoMotion);
+            var materialMeshInfo = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
+
+            //Resource
+            var mesh = Resources.GetBuiltinResource<Mesh>("Sphere.fbx");
+            var material = Resources.Load<Material>("Materials/MAT_Node");
+
+            var nodeEntityPrefab = entityManager.CreateEntity();
+
+            RenderMeshUtility.AddComponents(
+                nodeEntityPrefab,
+                entityManager,
+                in description,
+                new RenderMeshArray(new[] { material }, new[] { mesh }),
+                materialMeshInfo
+            );
+
+            entityManager.AddComponentData(nodeEntityPrefab, new LocalTransform
             {
                 Position = float3.zero,
                 Rotation = quaternion.identity,
                 Scale = NodeEntityScale
             }
-        );
+            );
 
-        entityManager.AddComponent<Prefab>(nodeEntityPrefab);
-        return nodeEntityPrefab;
-    }
+            entityManager.AddComponent<Prefab>(nodeEntityPrefab);
+            return nodeEntityPrefab;
+        }
 
-    Entity CreateWayEntityPrefab(EntityManager entityManager)
-    {
-        var wayEntityPrefab = entityManager.CreateEntity();
+        Entity CreateWayEntityPrefab(EntityManager entityManager)
+        {
+            var wayEntityPrefab = entityManager.CreateEntity();
 
-        entityManager.AddComponent<Prefab>(wayEntityPrefab);
-        return wayEntityPrefab;
-    }
+            entityManager.AddComponent<Prefab>(wayEntityPrefab);
+            return wayEntityPrefab;
+        }
 
-    Entity CreateLaneletEntityPrefab(EntityManager entityManager)
-    {
-        //Rendering
-        var description = new RenderMeshDescription(ShadowCastingMode.Off, false, MotionVectorGenerationMode.ForceNoMotion);
-        var materialMeshInfo = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
-        
-        //Resource
-        Mesh mesh = MeshExtensions.CreateSimpleQuad(1, 1, "lanelet_procedural");
-        var material = Resources.Load<Material>("Materials/MAT_Lanelet");
-        
-        var laneletEntityPrefab = entityManager.CreateEntity();
+        Entity CreateLaneletEntityPrefab(EntityManager entityManager)
+        {
+            //Rendering
+            var description = new RenderMeshDescription(ShadowCastingMode.Off, false, MotionVectorGenerationMode.ForceNoMotion);
+            var materialMeshInfo = MaterialMeshInfo.FromRenderMeshArrayIndices(0, 0);
 
-        RenderMeshUtility.AddComponents(
-            laneletEntityPrefab,
-            entityManager,
-            in description,
-            new RenderMeshArray(new[] { material }, new[] { mesh }),
-            materialMeshInfo
-        );
+            //Resource
+            Mesh mesh = MeshExtensions.CreateSimpleQuad(1, 1, "lanelet_procedural");
+            var material = Resources.Load<Material>("Materials/MAT_Lanelet");
 
-        entityManager.AddComponentData(laneletEntityPrefab, new LocalTransform
+            var laneletEntityPrefab = entityManager.CreateEntity();
+
+            RenderMeshUtility.AddComponents(
+                laneletEntityPrefab,
+                entityManager,
+                in description,
+                new RenderMeshArray(new[] { material }, new[] { mesh }),
+                materialMeshInfo
+            );
+
+            entityManager.AddComponentData(laneletEntityPrefab, new LocalTransform
             {
                 Position = float3.zero,
                 Rotation = quaternion.identity,
                 Scale = 1
             }
-        );
+            );
 
-        entityManager.AddComponent<Prefab>(laneletEntityPrefab);
-        return laneletEntityPrefab;
+            entityManager.AddComponent<Prefab>(laneletEntityPrefab);
+            return laneletEntityPrefab;
+        }
     }
 }

@@ -1,7 +1,10 @@
 using Unity.Collections;
 using Unity.Entities;
 
-public struct OSMLoadPathData : IComponentData
+namespace Curvit.Demos.DOTS_Move
 {
-    public FixedString512Bytes OSMLoadPath;
+    public struct OSMLoadPathData : IComponentData
+    {
+        public FixedString512Bytes OSMLoadPath;
+    }
 }

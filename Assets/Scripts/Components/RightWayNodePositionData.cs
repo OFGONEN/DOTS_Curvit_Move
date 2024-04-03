@@ -1,7 +1,10 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct RightWayNodePositionData : IBufferElementData
+namespace Curvit.Demos.DOTS_Move
 {
-    public float3 NodePosition;
+    public struct RightWayNodePositionData : IBufferElementData
+    {
+        public float3 NodePosition;
+    }
 }

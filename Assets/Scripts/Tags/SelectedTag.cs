@@ -1,3 +1,6 @@
 using Unity.Entities;
 
-public struct SelectedTag : IComponentData { }
+namespace Curvit.Demos.DOTS_Move
+{
+    public struct SelectedTag : IComponentData { }
+}
