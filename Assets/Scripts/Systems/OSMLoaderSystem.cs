@@ -4,6 +4,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using Unity.Transforms;
 
 namespace Curvit.Demos.DOTS_Move
@@ -84,6 +85,11 @@ namespace Curvit.Demos.DOTS_Move
                 {
                     ID = id,
                     Position = position
+                });
+
+                ecb.AddComponent<URPMaterialPropertyBaseColor>(nodeEntity, new URPMaterialPropertyBaseColor
+                {
+                    Value = new float4(1, 1, 1, 1)
                 });
 
                 ecb.SetComponent(nodeEntity, new LocalTransform

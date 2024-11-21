@@ -2,6 +2,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 using UnityEngine;
 
 namespace Curvit.Demos.DOTS_Move
@@ -40,6 +41,7 @@ namespace Curvit.Demos.DOTS_Move
                 for (int i = 0; i < entityArray.Length; i++)
                 {
                     ECB.AddComponent<SelectedTag>(entityArray[i]);
+                    ECB.SetComponent<URPMaterialPropertyBaseColor>(entityArray[i], new URPMaterialPropertyBaseColor { Value = new float4(1, 0, 0, 1) });
                 }
 
                 ECB.Playback(state.EntityManager);
@@ -56,6 +58,7 @@ namespace Curvit.Demos.DOTS_Move
                 for (int i = 0; i < entityArray.Length; i++)
                 {
                     ECB.RemoveComponent<SelectedTag>(entityArray[i]);
+                    ECB.SetComponent<URPMaterialPropertyBaseColor>(entityArray[i], new URPMaterialPropertyBaseColor { Value = new float4(1, 1, 1, 1) });
                 }
 
                 ECB.Playback(state.EntityManager);

@@ -24,7 +24,12 @@ namespace Curvit.Demos.DOTS_Move
         {
             var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             var entity = entityManager.CreateEntity();
-            var path = Path.Combine(Application.dataPath, "dots_move_test.osm");
+
+#if UNITY_EDITOR
+            var path = Path.Combine(Application.dataPath, "dots_test_move.osm");
+#else
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "dots_test_move.osm");
+#endif
 
             entityManager.AddComponentData<OSMLoadPathData>(entity, new OSMLoadPathData
             {

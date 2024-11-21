@@ -26,8 +26,9 @@ namespace Curvit.Demos.DOTS_Move
         {
             var inputData = SystemAPI.GetSingleton<InputData>().InputDirection;
             var deltaTime = SystemAPI.Time.DeltaTime;
+            float speed = 5;
 
-            var delta = new float3(inputData.x * deltaTime, 0, inputData.y * deltaTime);
+            var delta = new float3(inputData.x * deltaTime * speed, 0, inputData.y * deltaTime * speed);
 
             EntityQuery query = new EntityQueryBuilder(Allocator.Temp)
                 .WithAllRW<NodeData, LocalTransform>()
